@@ -7,23 +7,23 @@ import java.util.TreeMap;
 public final class HashRing {
     private final int ringSize = 10;
     private final SortedMap<Integer, VNode> ring = new TreeMap<>();
-    private final int replicationFactor;
+    private final int vNodesPerNode;
 
     public HashRing(int replicationFactor, List<Node> nodes) {
-        this.replicationFactor = replicationFactor;
+        this.vNodesPerNode = replicationFactor;
 
         nodes.forEach(node -> addNode(node));
     }
 
     public void addNode(Node node) {
-        for(int i=0; i<replicationFactor; i++){
+        for(int i = 0; i< vNodesPerNode; i++){
             int hash = index(node.ipAddress() + i);
             this.ring.put(hash, new VNode(node));
         }
     }
 
     public void removeNode(Node node) {
-        for(int i=0; i<replicationFactor; i++){
+        for(int i = 0; i< vNodesPerNode; i++){
             int hash = index(node.ipAddress() + i);
             ring.remove(hash);
         }
